@@ -3,6 +3,7 @@ package main
 import (
 	"fmt"
 	"io/ioutil"
+	"os"
 	"strings"
 )
 
@@ -28,12 +29,27 @@ func getVal(file string) (string, error) {
 	return strings.TrimSpace(str), nil
 }
 
+func usage() {
+	// Get a list of registed components to print out
+	availComponents := make([]string, 0, len(components))
+	for comp, _ := range components {
+		availComponents = append(availComponents, comp)
+	}
+
+	fmt.Printf("usage: %s compA compB ..\n", os.Args[0])
+	fmt.Printf("  Available components:\n    %s\n", strings.Join(availComponents, ", "))
+	os.Exit(1)
+}
+
 func main() {
-	comps := []string{"bat"} // TODO: Add support for command line flags.
+	if len(os.Args) == 1 {
+		usage()
+	}
 
 	// Call each components function, and add it's output string to output.
-	output := make([]string, 0, len(comps))
-	for _, c := range comps {
+	// If a component is invalid, it is simple ignored.
+	output := make([]string, 0, len(os.Args)-1)
+	for _, c := range os.Args[1:] {
 		if compFunc, ok := components[c]; ok {
 			if compOut, err := compFunc(); err == nil {
 				output = append(output, compOut)
