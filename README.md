@@ -3,7 +3,7 @@ tmuxer
 
 Outputs a formated string to stdout for use in the tmux status bar.
 
-Components are specified as command line arguments, the are printed out in the order passes in.
+Components are specified as command line arguments, the are printed out in the order they are passed in.
 
 Usage
 =======
